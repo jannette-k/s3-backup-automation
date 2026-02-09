@@ -24,14 +24,14 @@ logging.info("Backup script started")
 try:
     REGION = os.getenv("REGION")
     
-    DB_BUCKET =  "database-backup-254"
-    DOCS_BUCKET = "documents-backup-254"
-    PHOTOS_BUCKET= "photo-backup-254"
+    DB_BUCKET =  "database-bucket-name"
+    DOCS_BUCKET = "documents-bucket-name"
+    PHOTOS_BUCKET= "photo-bucket-name"
     
     # Note: BASE_FOLDER points to the script folder (automatic_desktop_folder). 
     # The data folders (database, customer-data-docs, pictures) are siblings of this folder, 
     # so we use `.parent` to step up one level and access them correctly.
-    
+
     DATABASE_FOLDER = BASE_FOLDER.parent / "database"
     DOCUMENTS_FOLDER = BASE_FOLDER.parent / "customer-data-docs"
     PHOTOS_FOLDER = BASE_FOLDER.parent / "pictures" 
