@@ -1,9 +1,17 @@
 # Automated Cloud Backup System for Small Businesses Python + AWS(S3 + SNS)
 
-## Project Overview
-This project implements an automated cloud backup solution designed for small businesses and individuals who store critical data locally. The system securely backs up files to Amazon S3 on a scheduled basis and notifies the business owner when backups complete successfully.
+## Executive Summary
+This project demonstrates a practical cloud backup solution tailored for small businesses. It automatically secures local files by uploading them to Amazon S3, applies versioning for recovery, and sends real‑time email notifications via Amazon SNS. By combining Python automation with AWS services, the system reduces the risk of data loss and ensures business continuity without manual intervention.
 
-The goal is to reduce the risk of data loss caused by hardware failure, accidental deletion, or lack of consistent manual backups.
+---
+## Key Features
+- 🔒 **Secure Cloud Storage**: Files backed up to Amazon S3 with versioning enabled.
+- 📧 **Automated Notifications**: Email alerts via Amazon SNS for success or failure.
+- ⚡ **Efficient Transfers**: Large CSV files compressed before upload.
+- 📝 **Detailed Logging**: Backup logs for troubleshooting and validation.
+- 🔄 **Smart State Tracking**: Avoids re‑uploading unchanged files.
+- 🕑 **Scheduled Automation**: Runs daily using Windows Task Scheduler.
+- 🛠️ **Error Handling**: Graceful recovery from common issues (permissions, credentials, file access).
 
 ---
 
@@ -11,63 +19,58 @@ The goal is to reduce the risk of data loss caused by hardware failure, accident
 Many small businesses store important data locally, such as:
 
 - Customer documents
-
 - Photos and media files
-
 - Database exports (CSV files)
 
 These businesses often face challenges such as:
 
 - Backups being forgotten or done inconsistently
-
 - No offsite copy of critical data
-
 - No confirmation that backups actually succeeded
 
-This project simulates how a small business owner can automate backups and receive confirmation emails by downloading the script, configuring it on their machine, and scheduling it to run automatically
+This project simulates how a small business owner can ***automate backups and receive confirmation emails by downloading the script, configuring it on their machine, and scheduling it to run automatically.***
 
 ---
-
 ## Architecture Overview
 
 ![Architecture Diagram](screenshots/automatic-backup.png)
 
+---
 ## Technologies Used
-- Python (Boto3) – Backup automation
+- ***Python (Boto3)*** – Backup automation
 
-- Amazon S3 – Object storage
+- ***Amazon S3*** – Object storage
 
-- S3 Versioning – File recovery & history
+- ***S3 Versioning*** – File recovery & history
 
-- Amazon SNS – Email notifications
+- ***Amazon SNS*** – Email notifications
 
-- Windows Task Scheduler – Automation
+- ***Windows Task Scheduler*** – Automation
 
 ---
-
 ## Resource Configuration
-### Amazon S3
-1. Create Buckets
+### Amazon S3 Configurations
+**Step 1: Create Amazon S3 Bucket**
 
-Log in to the AWS Management Console → S3 → Create bucket.
+- Log in to the AWS Management Console → S3 → Create bucket.
 
-Create three buckets (or fewer, depending on your needs):
+- Create three buckets (or fewer, depending on your needs):
 
-database-backup-XXX
+  database-backup-XXX
 
-documents-backup-XXX
+  documents-backup-XXX
 
-photos-backup-XXX
+  photos-backup-XXX
 
-2. Enable Versioning
+**Step 2: Enable Versioning**
 
-Open each bucket → Properties → Bucket Versioning → Enable.
+- Open each bucket → Properties → Bucket Versioning → Enable.
 
 This ensures every backup version is preserved, even if files are overwritten.
 
-3. Configure Lifecycle Rules
+**Step 3: Configure Lifecycle Rules**
 
-Bucket → Management → Lifecycle rules → Create rule.
+- Bucket → Management → Lifecycle rules → Create rule.
 
 Example rule:
 
@@ -75,55 +78,56 @@ Transition non‑current versions to Glacier Flexible Retrieval after 30 days.
 
 Optionally, expire non‑current versions after 365 days.
 
-### Amazon SNS
-1. Create a Topic
+### Amazon SNS Configurations
 
-Go to AWS Management Console → SNS → Create topic.
+**Step 1: Create a Topic**
 
-Choose Standard type.
+- Go to AWS Management Console → SNS → Create topic.
 
-Name it something like BackupNotifications
+- Choose Standard type.
 
-2. Create a Subscription
+- Name it something like BackupNotifications
 
-Select the topic → Create subscription.
+**Step 2: Create a Subscription**
 
-Protocol: Email.
+- Select the topic → Create subscription.
 
-Endpoint: enter the business owner’s email address.
+- Protocol: Email.
 
-Confirm the subscription by clicking the link in the email AWS sends.
+- Endpoint: enter the business owner’s email address.
 
-3. Get the Topic ARN
+- Confirm the subscription by clicking the link in the email AWS sends.
 
-Copy the ARN from the topic details page.
+**Step 3: Get the Topic ARN**
 
-Paste it into your script (TOPIC_ARN variable).
+- Copy the ARN from the topic details page.
 
-### IAM
-1. Create a User
+- Paste it into your script (TOPIC_ARN variable).
 
-AWS Console → IAM → Users → Add users.
+### IAM Configurations
+**Step 1: Create a User**
 
-Name: backup-script-user.
+- AWS Console → IAM → Users → Add users.
 
-Select Programmatic access (for CLI/API).
+- Name: backup-script-user.
 
-2. Attach Policies
+- Select Programmatic access (for CLI/API).
 
-Grant the user permissions to:
+**Step 2: Attach Policies**
+
+- Grant the user permissions to:
 
 AmazonS3FullAccess (or a custom policy limited to your backup buckets).
 
 AmazonSNSFullAccess (or a custom policy limited to your notification topic).
 
-3. Download Credentials
+- Download Credentials
 
-Save the generated Access Key ID and Secret Access Key.
+- Save the generated Access Key ID and Secret Access Key.
 
-Configure them locally using the AWS CLI:  *aws configure*
+- Configure them locally using the AWS CLI:  *aws configure*
 
-Enter the keys and default region (e.g., us-east-1).
+- Enter the keys and default region (e.g., us-east-1).
 
 ---
 
@@ -229,7 +233,7 @@ The following tests were performed:
 Lifecycle policy transitions were configured but not fully observed due to minimum AWS timing constraints.
 Amazon S3 Lifecycle policies were chosen to automatically transition older backups to lower‑cost storage and delete stale versions, ensuring long‑term cost efficiency and data management without manual effort.
 
-*Check project's screenshot folder for validation results*
+***Check project's screenshot folder for validation results***
 
 ---
 
